@@ -70,4 +70,10 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
     }
 
+    /**
+     * 
+     */
+    public boolean equals(ISet<E> expected){
+
+    }
 }

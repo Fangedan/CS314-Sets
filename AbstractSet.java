@@ -66,4 +66,44 @@ public abstract class AbstractSet<E> implements ISet<E> {
         result.append(")");
         return result.toString();
     }
+
+    /**
+     * 
+     */
+    public ISet<E> difference(ISet<E> otherSet) {
+        ISet<E> differenceSet = new AbstractSet<>();
+        Iterator<E> it = this.iterator();
+        
+        while (it.hasNext()) {
+            E obj = it.next();
+            if (!otherSet.contains(obj)) {
+                differenceSet.add(obj);
+            }
+        }
+        return differenceSet;
+    }
+
+    public ISet<E> union(ISet<E> otherSet){
+        ISet<E> unionSet = otherSet;
+        ISet<E> differenceSet = difference(otherSet);
+        Iterator<E> it = differenceSet.iterator();
+        while (it.hasNext()){
+            E obj = it.next();
+            unionSet.add(obj);
+        }
+        return unionSet;
+    }
+
+    /**
+     * 
+     */
+    public boolean equals(Object other){
+        
+    }
+
+    public boolean add(E item){
+        if (!this.contains(item)){
+            
+        }
+    }
 }
