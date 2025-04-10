@@ -50,17 +50,17 @@ public abstract class AbstractSet<E> implements ISet<E> {
      */
     public String toString() {
         StringBuilder result = new StringBuilder();
-        String seperator = ", ";
+        String separator = ", ";
         result.append("(");
 
         Iterator<E> it = this.iterator();
         while (it.hasNext()) {
             result.append(it.next());
-            result.append(seperator);
+            result.append(separator);
         }
         // get rid of extra separator
         if (this.size() > 0) {
-            result.setLength(result.length() - seperator.length());
+            result.setLength(result.length() - separator.length());
         }
 
         result.append(")");
