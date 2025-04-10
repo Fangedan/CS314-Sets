@@ -34,6 +34,18 @@ import javax.swing.JFileChooser;
  * CS 314 Students, put your results to the experiments and answers to questions
  * here: CS314 Students, why is it unwise to implement all three of the
  * intersection, union, and difference methods in the AbstractSet class:
+ * 
+ * We believe it would be unwise to implement all three of 
+ * intersection(), union(), and difference() in the AbstractSet class
+ * because in order to implement any of those methods, you would only need
+ * access to one of them. For example, if you only had access to the difference()
+ * method and needed to find the union() between two sets, it would be the sum of
+ * the first set and the difference of the second set minus the first set. 
+ * Furthermore, if you only had access to the difference() method and needed to 
+ * find the intersection between two sets, it would be the difference of the second
+ * set minus the first set, then you would have to check if there is any element in 
+ * the first set that is not contained in the second set, and that would be your
+ * intersection.
  */
 
 public class SetTester {
