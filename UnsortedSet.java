@@ -31,6 +31,7 @@ import java.util.ArrayList;
  */
 public class UnsortedSet<E> extends AbstractSet<E> {
 
+    // Instance variable(s)
     private ArrayList<E> myCon;
 
     // Constructor for initializing the container
