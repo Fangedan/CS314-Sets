@@ -80,7 +80,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
         }
 
         if (!this.contains(item)) {
-            this.addNew(item);
+            this.addImpl(item);
             return true;
         }
 
