@@ -27,25 +27,11 @@ import java.util.Iterator;
  */
 public abstract class AbstractSet<E> implements ISet<E> {
 
-    /* DELETE THIS COMMENT FROM YOUR SUBMISSION.
-     *
-     * RECALL:
-     *
-     * NO INSTANCE VARIABLES ALLOWED.
-     *
-     * NO DIRECT REFERENCE TO UnsortedSet OR SortedSet ALLOWED.
-     * (In other words the data types UnsortedSet and SortedSet
-     * will not appear anywhere in this class.)
-     *
-     * NO DIRECT REFERENCES to ArrayList or other Java Collections.
-     *
-     * NO METHODS ADDED other than those in ISet and Object.
-     */
-
     /**
      * Return a String version of this set. 
      * Format is (e1, e2, ... en)
      * @return A String version of this set.
+     * Big O - O(N)
      */
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -71,7 +57,8 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * <br> item != null
      * @param item the item to be added to this set. item may not equal null.
      * @return true if this set changed as a result of this operation,
-     * false otherwise.
+     * false otherwise
+     * Big O - O(N)
      */
     public boolean add(E item) {
         // Check Precondition
@@ -87,12 +74,16 @@ public abstract class AbstractSet<E> implements ISet<E> {
         return false;
     }
 
+    // Abstract method to be implemented by subclasses to add a set
+    protected abstract boolean addImpl(E item);
+
     /**
     * A union operation. Add all items of otherSet that
     * are not already present in this set to this set.
     * @param otherSet != null
     * @return true if this set changed as a result of this operation,
     * false otherwise.
+    * Big O - O(N^2)
     */
     public boolean addAll(ISet<E> otherSet) {
         // Check Precondition
@@ -118,6 +109,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * Make this set empty.
      * <br>pre: none
      * <br>post: size() = 0
+     * Big O - O(N)
      */
     public void clear() {
         Iterator<E> it = this.iterator();
@@ -134,6 +126,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * @param item element whose presence is being tested.
      * Item may not equal null.
      * @return true if this set contains the specified item, false otherwise.
+     * Big O - O(N)
      */
     public boolean contains(E item) {
         // Check Precondition
@@ -158,6 +151,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * @param otherSet != null
     * @return true if this set contains all of the elements in otherSet,
     * false otherwise.
+    * Big O - O(N^2)
     */
     public boolean containsAll(ISet<E> otherSet) {
         // Check Precondition
@@ -188,6 +182,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * Neither this set or otherSet are altered as a result of this operation.
     * @param otherSet != null
     * @return a set that is the difference of this set and otherSet
+    * Big O - O(N^2)
     */
     public ISet<E> difference(ISet<E> otherSet){
         // Check Precondition
@@ -195,8 +190,9 @@ public abstract class AbstractSet<E> implements ISet<E> {
             throw new NullPointerException("otherSet is null");
         }
 
-        ISet<E> differenceSet = new UnsortedSet<>();
-        Iterator<E> it = this.iterator();      
+        ISet<E> differenceSet = this.createNewSet();
+        Iterator<E> it = this.iterator();  
+            
         while (it.hasNext()) {
             E obj = it.next();
             if (!otherSet.contains(obj)) {
@@ -207,6 +203,9 @@ public abstract class AbstractSet<E> implements ISet<E> {
         return differenceSet;
     }
 
+    // Abstract method to be implemented by subclasses to create an empty set
+    protected abstract ISet<E> createNewSet();
+
     /**
     * Determine if this set is equal to other.
     * Two sets are equal if they have exactly the same elements.
@@ -214,33 +213,33 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * pre: none
     * @param other the object to compare to this set
     * @return true if other is a Set and has the same elements as this set
+    * Big O - O(N^2)
     */
     public boolean equals(Object other) {
+        // Same object reference
         if (this == other) {
-            return true;  // Same object reference
-        }
-    
+            return true; 
+        }   
+
+        // Different type or null
         if (other == null || !(other instanceof ISet<?>)) {
-            return false;  // Different type or null
+            return false;
         }
-    
-        ISet<?> otherSet = (ISet<?>) other;
-    
+
+        ISet<E> otherSet = (ISet<E>) other;
+
         // Check if the sets have the same number of elements
         if (this.size() != otherSet.size()) {
             return false;
         }
-    
-        // Check if all elements in this set are contained in the other set
-        Iterator<E> it = this.iterator();
-        while (it.hasNext()) {
-            E item = it.next();
+        for (E item : this) {
             if (!otherSet.contains(item)) {
-                return false;  // Found an element not in the other set
+                return false;
             }
         }
     
-        return true;  // All elements are present in both sets
+        // All elements are present in both sets
+        return true;
     }
 
     /**
@@ -251,22 +250,22 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * Neither this set or otherSet are altered as a result of this operation.
     * @param otherSet != null
     * @return a set that is the intersection of this set and otherSet
+    * Big O - O(N^2)
     */
     public ISet<E> intersection(ISet<E> otherSet){
         // Check Precondition
         if (otherSet == null) {
             throw new NullPointerException("otherSet is null");
         }
-
-        ISet<E> intersectionSet = new UnsortedSet<>();
-        Iterator<E> it = this.iterator();
+        ISet<E> differenceSet = this.difference(otherSet);
+        ISet<E> intersectionSet = this.createNewSet();
+        Iterator<E> it = differenceSet.iterator();
         while (it.hasNext()) {
             E obj = it.next();
-            if (otherSet.contains(obj)) {
+            if (!differenceSet.contains(obj)) {
                 intersectionSet.add(obj);
             }
         }
-
         return intersectionSet;
     }
 
@@ -284,6 +283,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * @param item the item to remove from the set. item may not equal null.
     * @return true if this set changed as a result of this operation,
     * false otherwise
+    * Big O - O(N)
     */
     public boolean remove(E item) {
         // Check Precondition
@@ -308,6 +308,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * Return the number of elements of this set.
     * pre: none
     * @return the number of items in this set
+    * Big O - O(N)
     */
     public int size() {
         Iterator<E> it = this.iterator();
@@ -327,27 +328,21 @@ public abstract class AbstractSet<E> implements ISet<E> {
     * Neither this set or otherSet are altered as a result of this operation.
     * @param otherSet != null
     * @return a set that is the union of this set and otherSet
+    * Big O - O(N^2)
     */
     public ISet<E> union(ISet<E> otherSet){
         // Check Precondition
         if (otherSet == null) {
             throw new NullPointerException("otherSet is null");
         }
-
-        ISet<E> unionSet = new UnsortedSet<>();
+        ISet<E> differenceSet = this.difference(otherSet);
+        ISet<E> unionSet = otherSet;
 
         // Add all elements from this set
-        Iterator<E> it1 = this.iterator();
-        while (it1.hasNext()) {
-            unionSet.add(it1.next());
+        Iterator<E> it = differenceSet.iterator();
+        while (it.hasNext()) {
+        	unionSet.add(it.next());
         }
-
-        // Add all elements from otherSet (will skip duplicates if set handles them)
-        Iterator<E> it2 = otherSet.iterator();
-        while (it2.hasNext()) {
-            unionSet.add(it2.next());
-        }
-
         return unionSet;
     }
 }

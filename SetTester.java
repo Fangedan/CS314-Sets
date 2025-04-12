@@ -46,229 +46,255 @@ import javax.swing.JFileChooser;
  * set minus the first set, then you would have to check if there is any element in 
  * the first set that is not contained in the second set, and that would be your
  * intersection.
+ * 
+ * SORTEDSET:
+ * | File | Size (kb) | Total Words | Increase from prev row (total words) | 
+ * | De Jongfryske biweging.txt | 240 KB | 40781 | --- |
+ * | House property & its management.txt | 119 KB | 19771 | 0.485 |
+ * | Six Mrs. Greenes | 374 KB | 65929 | 3.335 |
+ * | Legal antiquities.txt | 635 KB | 106198 | 1.611 |
+ * 
+ * | Unique Words | inc from prev row (unique words) |
+ * | 7959 | --- |
+ * | 4758 | 0.598 |
+ * | 10677 | 2.244 |
+ * | 17739 | 1.661 |
+ * 
+ * | Actual time | inc from prev row (actual time)
+ * | 0.1296329 seconds | --- |
+ * | 0.0978473 seconds | 0.752 |
+ * | 0.1412596 seconds seconds | 1.439 |
+ * | 0.1577625 seconds | 1.117 |
+ * 
+ * UNSORTEDSET:
+ * | File | Size (kb) | Total Words | Increase from prev row (total words) | 
+ * | De Jongfryske biweging.txt | 240 KB | 40781 | --- |
+ * | House property & its management.txt | 119 KB | 19771 | 0.485 |
+ * | Six Mrs. Greenes | 374 KB | 65929 | 3.335 |
+ * | Legal antiquities.txt | 635 KB | 106198 | 1.611 |
+ * 
+ * | Unique Words | inc from prev row (unique words) |
+ * | 7959 | --- |
+ * | 4758 | 0.598 |
+ * | 10677 | 2.244 |
+ * | 17739 | 1.661 |
+ * 
+ * | Actual time | inc from prev row (actual time)
+ * | 0.6949382 seconds | --- |
+ * | 0.2070012 seconds | 0.298 |
+ * | 1.3596119 seconds | 6.565 |
+ * | 3.1151332 seconds | 2.292 |
+ * 
+ * JAVA HASHSET:
+ * | File | Size (kb) | Total Words | Increase from prev row (total words) | 
+ * | De Jongfryske biweging.txt | 240 KB | 40781 | --- |
+ * | House property & its management.txt | 119 KB | 19771 | 0.485 |
+ * | Six Mrs. Greenes | 374 KB | 65929 | 3.335 |
+ * | Legal antiquities.txt | 635 KB | 106198 | 1.611 |
+ * 
+ * | Unique Words | inc from prev row (unique words) |
+ * | 7959 | --- |
+ * | 4758 | 0.598 |
+ * | 10677 | 2.244 |
+ * | 17739 | 1.661 |
+ * 
+ * | Actual time | inc from prev row (actual time)
+ * | 0.0444307 seconds | --- |
+ * | 0.0248737 seconds | 0.568 |
+ * | 0.0648365 seconds | 2.613 |
+ * | 0.0794719 seconds | 1.234 |
+ * 
+ * JAVA TREESET:
+ * | File | Size (kb) | Total Words | Increase from prev row (total words) | 
+ * | De Jongfryske biweging.txt | 240 KB | 40781 | --- |
+ * | House property & its management.txt | 119 KB | 19771 | 0.485 |
+ * | Six Mrs. Greenes | 374 KB | 65929 | 3.335 |
+ * | Legal antiquities.txt | 635 KB | 106198 | 1.611 |
+ * 
+ * | Unique Words | inc from prev row (unique words) |
+ * | 7959 | --- |
+ * | 4758 | 0.598 |
+ * | 10677 | 2.244 |
+ * | 17739 | 1.661 |
+ * 
+ * | Actual time | inc from prev row (actual time)
+ * | 0.0349137 seconds | --- |
+ * | 0.0286732 seconds | 0.829 |
+ * | 0.0632033 seconds | 2.172 |
+ * | 0.1010292 seconds | 1.603  |
+ * 
+ * #2:
+ * We think that the Big O of processTextCS314Sets() is O(N * M)
+ * and the Big O for Java Sets is: (HashSet O(N)) (TreeSet O(N log M))
+ * 
+ * #3:
+ * Add methods for:
+ * (UnsortedSet O(N))
+ * (SortedSet O(N))
+ * (HashSet O(1))
+ * (TreeSet O(log N))
+ * 
+ * #4:
+ * Hashset's output is in no discernable order yet keeps track of
+ * duplicate elements, while TreeSet appears to be sorted alphabetically.
  */
 
 public class SetTester {
 
     public static void main(String[] args) {
+        // Test 1,2
+        ISet<String> setAdd = new UnsortedSet<>();
+        // Add "X" for the first time (should return true)
+        boolean result = setAdd.add("X");
+        showTestResults(result, true, 1, setAdd, null, "add(): Adding 'X' should return true.");
+        
+        // Try to add duplicate "X" (should return false)
+        result = setAdd.add("X");
+        showTestResults(result, false, 2, setAdd, null, "add(): Adding duplicate 'X' should return false.");
 
+        // Test 3,4
         ISet<String> s1 = new UnsortedSet<>();
         s1.add("A");
-        s1.add("C");
-        s1.add("A");
-        s1.add("B");
-
-        // test 1
-        boolean actual = s1.contains("A");
-        showTestResults(actual, true, 1, s1, null, "add and contains methods UnsortedSet"
-                + "/nset 1 contains A.");
-
-        // test 2
-        s1.remove("A");
-        actual = s1.contains("A");
-        showTestResults(actual, false, 2, s1, null, "remove and contains method UnsortedSet"
-                + "/nset1 does not contain A.");
-
-        // test 3
-        actual = s1.size() == 2;
-        showTestResults(actual, true, 3, s1, null, "size method UnsortedSet"
-                + "/nsize of set 1 is 2.");
-
         ISet<String> s2 = new UnsortedSet<>();
-        s2.add("C");
-        s2.add("A");
         s2.add("B");
-
-        // test 4
-        actual = s2.containsAll(s1);
-        showTestResults(actual, true, 4, s1, s2, "containsAll method UnsortedSet"
-                + "/ns2 contains all of s1.");
-
-        // test 5
-        actual = s1.containsAll(s2);
-        showTestResults(actual, false, 5, s1, s2, "containsAll method UnsortedSet"
-                + "/ns1 contains all of s2.");
-
-        // test 6
-        ISet<String> s3 = s2.difference(s1);
-        ISet<String> expected = new UnsortedSet<>();
-        expected.add("A");
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 6, s1, s2, "difference and equals methods UnsortedSet"
-                + "/ns2.difference(s1). result = " + s3 + " expected result = " + expected);
-
-        // test 7
-        s3 = s2.union(s1);
-        expected.add("B");
-        expected.add("C");
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 7, s1, s2, "union and equals methods UnsortedSet"
-                + "/ns2.union(s1). actual result = " + s3
-                + " expected result = " + expected);
-
-        // test 8
-        s3 = s2.intersection(s1);
-        expected.remove("A");
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 8, s1, s2, "intersection and equals methods UnsortedSet"
-                + "/ns2.intersection(s1). actual result = " + s3
-                + " expected result = " + expected);
-
-        // sorted sets
-        s1 = new SortedSet<>();
-        s1.add("A");
-        s1.add("C");
-        s1.add("A");
-        s1.add("B");
-
-        // test 9
-        actual = s1.contains("A");
-        showTestResults(actual, true, 9, s1, null, "add and contains methods SortedSet"
-                + "/nset 1 contains A.");
-
-        // test 10
-        s1.remove("A");
-        actual = s1.contains("A");
-        showTestResults(actual, false, 10, s1, null, "remove and contains method SortedSet"
-                + "/nset1 does not contain A.");
-
-
-        // test 11
-        actual = s1.size() == 2;
-        showTestResults(actual, true, 11, s1, null, "size method SortedSet"
-                + "/nsize of set 1 is 2.");
-
-        s2 = new SortedSet<>();
         s2.add("C");
-        s2.add("A");
-        s2.add("B");
+        // First call: s1.addAll(s2) should successfully add B and C (returns true)
+        result = s1.addAll(s2);
+        showTestResults(result, true, 3, s1, s2, "addAll(): Adding s2 to s1 should return true.");
+        
+        // Second call: s1.addAll(s2) should add no new elements (returns false)
+        result = s1.addAll(s2);
+        showTestResults(result, false, 4, s1, s2, "addAll(): Adding s2 to s1 a second time should return false.");
+        
+        // Test 5
+        ISet<String> sClear = new UnsortedSet<>();
+        sClear.add("P");
+        sClear.add("Q");
+        sClear.add("R");
+        sClear.clear();
+        result = (sClear.size() == 0);
+        showTestResults(result, true, 5, sClear, null, "clear(): Set should be empty after clear().");
 
-        // test 12
-        actual = s2.containsAll(s1);
-        showTestResults(actual, true, 12, s1, s2, "containsAll method SortedSet"
-                + "/ns2 contains all of s1.");
+        // Test 6,7
+        ISet<String> sContains = new UnsortedSet<>();
+        sContains.add("Alpha");
+        result = sContains.contains("Alpha");
+        showTestResults(result, true, 6, sContains, null, "contains(): 'Alpha' should be found in the set.");
+        result = sContains.contains("Beta");
+        showTestResults(result, false, 7, sContains, null, "contains(): 'Beta' should not be found in the set.");
 
-        // test 13
-        actual = s1.containsAll(s2);
-        showTestResults(actual, false, 13, s1, s2, "containsAll method SortedSet"
-                + "/ns1 contains all of s2.");
+        // Test 8,9
+        ISet<String> sContainsAll1 = new UnsortedSet<>();
+        sContainsAll1.add("1");
+        sContainsAll1.add("2");
+        sContainsAll1.add("3");
+        ISet<String> sContainsAll2 = new UnsortedSet<>();
+        sContainsAll2.add("2");
+        sContainsAll2.add("3");
+        // sContainsAll1 contains all elements of sContainsAll2 → true
+        result = sContainsAll1.containsAll(sContainsAll2);
+        showTestResults(result, true, 8, sContainsAll1, sContainsAll2, "containsAll(): sContainsAll1 should contain sContainsAll2.");
+        // sContainsAll2 does NOT contain all elements of sContainsAll1 → false
+        result = sContainsAll2.containsAll(sContainsAll1);
+        showTestResults(result, false, 9, sContainsAll2, sContainsAll1, "containsAll(): sContainsAll2 should not contain sContainsAll1.");
 
-        // test 14
-        s3 = s2.difference(s1);
-        expected = new SortedSet<>();
-        expected.add("A");
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 14, s1, s2, "difference and equals methods SortedSet"
-                + "/ns2.difference(s1). result = " + s3 + " expected result = " + expected);
+        // Test 10
+        ISet<String> sDiff1 = new UnsortedSet<>();
+        sDiff1.add("apple");
+        sDiff1.add("banana");
+        sDiff1.add("cherry");
+        ISet<String> sDiff2 = new UnsortedSet<>();
+        sDiff2.add("banana");
+        ISet<String> diffResult = sDiff1.difference(sDiff2);
+        ISet<String> expectedDiff = new UnsortedSet<>();
+        expectedDiff.add("apple");
+        expectedDiff.add("cherry");
+        result = diffResult.equals(expectedDiff);
+        showTestResults(result, true, 10, sDiff1, sDiff2, "difference(): sDiff1.difference(sDiff2) should equal {apple, cherry}.");
 
-        // test 15
-        s3 = s1.difference(s2);
-        expected = new SortedSet<>();
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 14, s1, s2, "difference and equals methods SortedSet"
-                + "/ns1.difference(s2). result = " + s3 + " expected result = " + expected);
+        // Test 11
+        ISet<String> sInter1 = new UnsortedSet<>();
+        sInter1.add("dog");
+        sInter1.add("cat");
+        sInter1.add("mouse");
+        ISet<String> sInter2 = new UnsortedSet<>();
+        sInter2.add("cat");
+        sInter2.add("elephant");
+        ISet<String> interResult = sInter1.intersection(sInter2);
+        ISet<String> expectedInter = new UnsortedSet<>();
+        expectedInter.add("cat");
+        result = interResult.equals(expectedInter);
+        showTestResults(result, true, 11, sInter1, sInter2, "intersection(): Intersection should equal {cat}.");
 
-        // test 16
-        s3 = s1.union(s2);
-        expected = new SortedSet<>();
-        expected.add("A");
-        expected.add("B");
-        expected.add("C");
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 16, s1, s2, "union and equals methods SortedSet"
-                + "/ns2.union(s1). actual result = " + s3
-                + " expected result = " + expected);
+        // Test 12
+        ISet<String> sUnion1 = new UnsortedSet<>();
+        sUnion1.add("red");
+        sUnion1.add("green");
+        ISet<String> sUnion2 = new UnsortedSet<>();
+        sUnion2.add("green");
+        sUnion2.add("blue");
+        ISet<String> unionResult = sUnion1.union(sUnion2);
+        ISet<String> expectedUnion = new UnsortedSet<>();
+        expectedUnion.add("red");
+        expectedUnion.add("green");
+        expectedUnion.add("blue");
+        result = unionResult.equals(expectedUnion);
+        showTestResults(result, true, 12, sUnion1, sUnion2, "union(): Union should equal {red, green, blue}.");
 
+        // Test 13
+        ISet<String> sEquals1 = new UnsortedSet<>();
+        sEquals1.add("one");
+        sEquals1.add("two");
+        ISet<String> sEquals2 = new UnsortedSet<>();
+        sEquals2.add("two");
+        sEquals2.add("one");
+        result = sEquals1.equals(sEquals2);
+        showTestResults(result, true, 13, sEquals1, sEquals2, "equals(): Two sets with the same elements should be equal.");
 
-        // test 17
-        s3 = s1.intersection(s2);
-        expected.remove("A");
-        actual = s3.equals(expected);
-        showTestResults(actual, true, 17, s1, s2, "intersection and equals methods SortedSet"
-                + "/ns1.intersection(s2). actual result = " + s3
-                + " expected result = " + expected);
+        // Test 14, 15
+        ISet<String> sRemove = new UnsortedSet<>();
+        sRemove.add("removeMe");
+        result = sRemove.remove("removeMe");
+        showTestResults(result, true, 14, sRemove, null, "remove(): Removing an existing element should return true.");
+        result = sRemove.contains("removeMe");
+        showTestResults(result, false, 15, sRemove, null, "remove(): Set should not contain the removed element.");
 
-        // test 18
-        s1.add("A");
-        Iterator<String> it1 = s1.iterator();
-        Iterator<String> it2 = s2.iterator();
-        boolean good = true;
-        while (good && it1.hasNext()) {
-            good = it1.next().equals(it2.next());
+        // Test 16
+        ISet<String> sSize = new UnsortedSet<>();
+        sSize.add("first");
+        sSize.add("second");
+        sSize.add("third");
+        result = (sSize.size() == 3);
+        showTestResults(result, true, 16, sSize, null, "size(): Size should be 3 after adding three elements.");
+
+        // Test 17
+        SortedSet<Integer> sortedSet = new SortedSet<>();
+        sortedSet.add(30);
+        sortedSet.add(10);
+        sortedSet.add(20);
+        int minVal = sortedSet.min();
+        int maxVal = sortedSet.max();
+        boolean minMaxResult = (minVal == 10 && maxVal == 30);
+        showTestResults(minMaxResult, true, 17, sortedSet, null, 
+                "min() and max(): For SortedSet {10,20,30}, min should be 10 and max should be 30.");
+
+    
+        //CS314 Students. Uncomment this section when ready to
+        //run your experiments
+        try {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
-        showTestResults(good, true, 18, s1, s2, "iterator and add methods SortedSet."
-                + "\nChecked all elements equal via iterators.");
-
-        // test 19
-        s1 = new UnsortedSet<>();
-        UnsortedSet<Integer> si1 = new UnsortedSet<>();
-        actual = si1.equals(s1);
-        showTestResults(actual, true, 19, s1, s2, "equals methods UnsortedSet"
-                + "\ns2.equals(s1), both sets empty");
-
-        // test 20
-        s1.add("is");
-        s1.add("a");
-        si1.add(12);
-        si1.add(13);
-        si1.add(12);
-        actual = si1.equals(s1);
-        showTestResults(actual, false, 20, si1, null, "equals methods UnsortedSet"
-                + "\ns2.equals(s1), different data types of elements");
-
-        // test 21
-        ArrayList<Integer> ar = new ArrayList<>();
-        ar.add(12);
-        ar.add(13);
-        actual = si1.equals(ar);
-        showTestResults(actual, false, 20, si1, null, "equals methods UnsortedSet"
-                + "\nsi1.equals(anArrayList), other Object is not a set");
-
-        // test 22
-        Object obj1 = s1;
-        s2 = new UnsortedSet<>();
-        s2.add("a");
-        s2.add("is");
-        Object obj2 = s2;
-        actual = obj1.equals(obj2);
-        showTestResults(actual, true, 22, s1, s2, "equals methods UnsortedSet"
-                + "\nVerify equals overridden and not overloaded.");
-
-        // test 23
-        s1 = new SortedSet<>();
-        s1.add("A");
-        s1.add("A");
-        s1.add("B");
-        ISet<Integer> ss2 = new SortedSet<>();
-        ss2.add(12);
-        ss2.add(15);
-        ss2.add(12);
-        ss2.add(15);
-        actual = s1.equals(ss2);
-        showTestResults(actual, false, 23, s1, null, "equals methods SortedSet - different types"
-                + "\nsecond set contains Integers: " + ss2);
-
-        // test 24
-        actual = s1.equals(null);
-        showTestResults(actual, false, 24, s1, null, "equals methods SortedSet - other Object is null");
-
-        // CS314 Students. Uncomment this section when ready to
-        // run your experiments
-        // try {
-        // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        // }
-        // catch(Exception e) {
-        // System.out.println("Unable to change look and feel");
-        // }
-        // Scanner sc = new Scanner(System.in);
-        // String response = "";
-        // do {
-        // largeTest();
-        // System.out.print("Another file? Enter y to do another file: ");
-        // response = sc.next();
-        // } while( response != null && response.length() > 0
-        // && response.substring(0,1).equalsIgnoreCase("y") );
-
+        catch(Exception e) {
+        System.out.println("Unable to change look and feel");
+        }
+        Scanner sc = new Scanner(System.in);
+        String response = "";
+        do {
+        largeTest();
+        System.out.print("Another file? Enter y to do another file: ");
+        response = sc.next();
+        } while( response != null && response.length() > 0
+        && response.substring(0,1).equalsIgnoreCase("y") );
     }
 
     // print out results of test
