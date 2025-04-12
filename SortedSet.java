@@ -20,6 +20,7 @@
 
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * In this implementation of the ISet interface the elements in the Set are
@@ -41,7 +42,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * create an empty SortedSet
      */
     public SortedSet() {
-
+    	myCon = new ArrayList<>();
     }
 
     /**
@@ -49,7 +50,19 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @param other != null
      */
     public SortedSet(ISet<E> other) {
-
+    	if (other == null) {
+            throw new NullPointerException("other is null");
+        }
+        myCon = new ArrayList<>();
+        if (other instanceof SortedSet<?>) {
+            SortedSet<E> sortedOther = (SortedSet<E>) other;
+            myCon.addAll(sortedOther.myCon);
+        } else {
+            Iterator<E> it = other.iterator();
+            while(it.hasNext()) {
+                this.add(it.next());
+            }
+        }
     }
 
     /**
@@ -58,7 +71,10 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @return the smallest element in this SortedSet.
      */
     public E min() {
-
+    	if (myCon.isEmpty()) {
+            throw new IllegalStateException("SortedSet is empty");
+        }
+        return myCon.get(0);
     }
 
     /**
@@ -67,13 +83,41 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @return the largest element in this SortedSet.
      */
     public E max() {
-
+    	if (myCon.isEmpty()) {
+            throw new IllegalStateException("SortedSet is empty");
+        }
+        return myCon.get(myCon.size() - 1);
     }
 
-    /**
-     * 
-     */
-    public boolean equals(ISet<E> expected){
+    protected ISet<E> createNewSet() {
+        return new SortedSet<E>();
+    }
+    
+    protected boolean addImpl(E item) {
+        int index = Collections.binarySearch(myCon, item);
+        if (index >= 0) {
+            return false;
+        } else {
+            int insertionPoint = -index - 1;
+            myCon.add(insertionPoint, item);
+            return true;
+        }
+    }
+    
+    protected boolean removeImpl(E item) {
+        int index = Collections.binarySearch(myCon, item);
+        if (index >= 0) {
+            myCon.remove(index);
+            return true;
+        }
+        return false;
+    }
+    
+    public Iterator<E> iterator() {
+        return myCon.iterator();
+    }
 
+    public int size() {
+        return myCon.size();
     }
 }
