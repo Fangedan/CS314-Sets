@@ -38,6 +38,10 @@ public class UnsortedSet<E> extends AbstractSet<E> {
         myCon = new ArrayList<>();
     }
 
+    protected ISet<E> createNewSet(){
+    	return new UnsortedSet<E>();
+    }
+
     /**
      * Add an item to this set.
      * <br> item != null
@@ -45,20 +49,9 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * @return true if this set changed as a result of this operation,
      * false otherwise.
      */
-    public boolean add(E item) {
-        // Check Precondition
-        if (item == null) {
-            throw new NullPointerException("Item is null");
-        }
-
-        if (!myCon.contains(item)) {
-            myCon.add(item);
-            return true;
-        }
-        
-        return false;
+    protected boolean addImpl(E item) {
+    	return myCon.add(item);
     }
-
 
     /**
      * Return an Iterator object for the elements of this set.
@@ -87,6 +80,14 @@ public class UnsortedSet<E> extends AbstractSet<E> {
                  + "operation is not supported.");
             }
         };
+    }
+
+    protected boolean removeImpl(E item) {
+    	return myCon.remove(item);
+    }
+    
+    public int size() {
+    	return myCon.size();
     }
 
 }
